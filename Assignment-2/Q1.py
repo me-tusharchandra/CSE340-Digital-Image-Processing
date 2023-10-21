@@ -93,22 +93,23 @@ for noiseLevel in noiseLevels:
             bestPSNR[noiseLevel] = psnr_value
             bestParams[noiseLevel] = winSize
 
-        # Save the noisy and denoised images in the Output folder
-        noisy_image_path = os.path.join(output_dir, f'noisy_image_{int(noiseLevel * 100)}_{winSize}x{winSize}.png')
         denoised_image_path = os.path.join(output_dir, f'denoised_image_{int(noiseLevel * 100)}_{winSize}x{winSize}.png')
 
-        # Save the noisy and denoised images, overwriting if they already exist
-        cv2.imwrite(noisy_image_path, noisyImage, [cv2.IMWRITE_PNG_COMPRESSION, 0])
         cv2.imwrite(denoised_image_path, denoisedImage, [cv2.IMWRITE_PNG_COMPRESSION, 0])
 
+        # Display information about the denoising process
         print(f"Window Size: {winSize}x{winSize}, PSNR: {psnr_value:.2f}")
+
+    # Save the noisy image for this noise level outside the window size loop
+    noisy_image_path = os.path.join(output_dir, f'noisy_image_{int(noiseLevel * 100)}.png')
+    cv2.imwrite(noisy_image_path, noisyImage, [cv2.IMWRITE_PNG_COMPRESSION, 0])
 
 # Printing the best parameters
 print()
 print("--------------------")
-print("Best Parameters:")
+print("Best Denoising Parameters:")
 for noiseLevel, winSize in bestParams.items():
-    print(f"Best denoising parameter for {int(noiseLevel * 100)}% noise: {winSize}x{winSize} (PSNR: {bestPSNR[noiseLevel]:.2f})")
+    print(f"{int(noiseLevel * 100)}% noise: {winSize}x{winSize} (PSNR: {bestPSNR[noiseLevel]:.2f})")
 
 print()
 print("--------------------")
