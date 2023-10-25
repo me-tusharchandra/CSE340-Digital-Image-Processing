@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 
 # Output directory
-output_dir = 'Output'
+output_dir = 'Output1'
 os.makedirs(output_dir, exist_ok=True)
 
 # Loading the image
@@ -71,8 +71,8 @@ noiseLevels = [0.05, 0.15, 0.20, 0.25]
 # Window sizes
 windowSizes = [3, 5, 7]
 
-bestParams = {} 
-bestPSNR = {} 
+parameters = {} 
+psnrsz = {} 
 
 print()
 
@@ -82,16 +82,16 @@ for noiseLevel in noiseLevels:
     print(f"Noise Level: {noiseLevel * 100}%")
     noisyImage = snp(img, noiseLevel)
     cleanImage = img
-    bestPSNR[noiseLevel] = -1 
+    psnrsz[noiseLevel] = -1 
 
     # Looping over all window sizes
     for winSize in windowSizes:
         denoisedImage = median(noisyImage, winSize)
         psnr_value = PSNR(cleanImage, denoisedImage)
 
-        if psnr_value > bestPSNR[noiseLevel]:
-            bestPSNR[noiseLevel] = psnr_value
-            bestParams[noiseLevel] = winSize
+        if psnr_value > psnrsz[noiseLevel]:
+            psnrsz[noiseLevel] = psnr_value
+            parameters[noiseLevel] = winSize
 
         denoised_image_path = os.path.join(output_dir, f'denoised_image_{int(noiseLevel * 100)}_{winSize}x{winSize}.png')
 
@@ -108,8 +108,8 @@ for noiseLevel in noiseLevels:
 print()
 print("--------------------")
 print("Best Denoising Parameters:")
-for noiseLevel, winSize in bestParams.items():
-    print(f"{int(noiseLevel * 100)}% noise: {winSize}x{winSize} (PSNR: {bestPSNR[noiseLevel]:.2f})")
+for noiseLevel, winSize in parameters.items():
+    print(f"{int(noiseLevel * 100)}% noise: {winSize}x{winSize} (PSNR: {psnrsz[noiseLevel]:.2f})")
 
 print()
 print("--------------------")
