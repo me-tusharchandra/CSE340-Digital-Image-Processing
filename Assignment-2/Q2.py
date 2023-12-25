@@ -1,3 +1,6 @@
+# Written by: Tushar Chandra - 2021211
+
+# Importing necessary libraries
 import os
 import cv2
 import numpy as np
